@@ -1,17 +1,8 @@
 import express from 'express';
 import { prisma } from '../utils/prisma/index.js';
-import joi from 'joi';
+import {createReviews as createReviews} from '../error.hander/joi.error.definition.js'
 
 const router = express.Router();
-
-const createReviews = joi.object({
-  bookTitle: joi.string(),
-  title: joi.string(),
-  content: joi.string().required(),
-  starRating: joi.number().min(1).max(10).required(),
-  author: joi.string().required(),
-  password: joi.number().required()
-});
 
 
 /** 리뷰 등록 **/
