@@ -51,7 +51,7 @@ router.put(
       const { content, author, password } = validationBody;
 
       const comment = await prisma.comments.findUnique({
-        where: { commentsId: +commentId },
+        where: { commentsId: +commentId, deletedAt: null },
       });
 
       if (!comment) {
