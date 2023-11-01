@@ -5,8 +5,8 @@ import { createReviews as createReviews } from "../error.hander/joi.error.defini
 const router = express.Router();
 
 /** 리뷰 등록 **/
-//localhost:3017/api/reviews POST
-router.post("/reviews", async (req, res) => {
+//api/reviews POST
+router.post('/reviews', async (req, res) => {
   try {
     const validation = await createReviews.validateAsync(req.body);
     const { bookTitle, title, content, starRating, author, password } =
@@ -23,8 +23,8 @@ router.post("/reviews", async (req, res) => {
 });
 
 /** 리뷰 목록 조회 **/
-//localhost:3017/api/reviews GET
-router.get("/reviews", async (req, res) => {
+//api/reviews GET
+router.get('/reviews', async (req, res) => {
   try {
     const reviews = await prisma.reviews.findMany({
       where: { deletedAt: null },
@@ -45,8 +45,8 @@ router.get("/reviews", async (req, res) => {
 });
 
 /** 리뷰 상세 조회 **/
-//localhost:3017/api/reviews/:reviewId GET
-router.get("/reviews/:reviewsId", async (req, res) => {
+//api/reviews/:reviewId GET
+router.get('/reviews/:reviewsId', async (req, res) => {
   try {
     const { reviewsId } = req.params;
 
@@ -71,15 +71,15 @@ router.get("/reviews/:reviewsId", async (req, res) => {
 });
 
 /** 리뷰 정보 수정 **/
-//localhost:3017/api/reviews/:reviewId PUT
-router.put("/reviews/:reviewsId", async (req, res) => {
+//api/reviews/:reviewId PUT
+router.put('/reviews/:reviewsId', async (req, res) => {
   try {
     const validation = await createReviews.validateAsync(req.body);
 
     const { bookTitle, title, content, starRating, author, password } =
       validation;
 
-    const { reviewsId } = req.params; //얘도 joi로 유효성 검사 할 수 있나?
+    const { reviewsId } = req.params; 
 
     const reviews = await prisma.reviews.findUnique({
       where: { reviewsId: +reviewsId },
@@ -97,7 +97,7 @@ router.put("/reviews/:reviewsId", async (req, res) => {
 
     await prisma.reviews.update({
       data: { bookTitle, title, content, starRating, author },
-      where: { reviewsId: +reviewsId, password },
+      where: { reviewsId: +reviewsId, password }
     });
 
     return res.status(201).json({ message: "책 리뷰를 수정하였습니다." });
@@ -107,8 +107,8 @@ router.put("/reviews/:reviewsId", async (req, res) => {
 });
 
 /** 리뷰 삭제 **/
-//localhost:3017/api/reviews/:reviewId DELETE
-router.delete("/reviews/:reviewsId", async (req, res) => {
+//api/reviews/:reviewId DELETE
+router.delete('/reviews/:reviewsId', async (req, res) => {
   try {
     const { password } = req.body;
     const { reviewsId } = req.params;
@@ -117,7 +117,6 @@ router.delete("/reviews/:reviewsId", async (req, res) => {
       where: { reviewsId: +reviewsId },
     });
 
-    //reviewsId에 아무것도 안뜨면 404 에러가 뜸. 아무것도 안넣을땐 자동 0이 되도록 하는 방법은 없을까
     if (!reviewsId) {
       return res
         .status(404)
@@ -131,7 +130,7 @@ router.delete("/reviews/:reviewsId", async (req, res) => {
     // await prisma.reviews.delete({ where: { reviewsId : +reviewsId, password }})
     await prisma.reviews.update({
       data: { deletedAt: new Date() },
-      where: { reviewsId: +reviewsId },
+      where: { reviewsId: +reviewsId }
     });
 
     return res.status(200).json({ message: "책 리뷰를 삭제하였습니다." });
