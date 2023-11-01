@@ -6,12 +6,13 @@ const router = express.Router();
 
 const createReviews = joi.object({
   bookTitle: joi.string(),
-  title: joi.string().required(),
+  title: joi.string(),
   content: joi.string().required(),
   starRating: joi.number().min(1).max(10).required(),
   author: joi.string().required(),
   password: joi.number().required()
 });
+
 
 /** 리뷰 등록 **/
 //localhost:3017/api/reviews POST
@@ -78,6 +79,10 @@ router.get('/reviews/:reviewsId', async (req, res) => {
   };
 });
 
+
+
+
+
 /** 리뷰 정보 수정 **/
 //localhost:3017/api/reviews/:reviewId PUT
 router.put('/reviews/:reviewsId', async (req, res) => {
@@ -101,7 +106,7 @@ router.put('/reviews/:reviewsId', async (req, res) => {
     }
 
     await prisma.reviews.update({
-      data: { bookTitle, title, content, starRating },
+      data: { bookTitle, title, content, starRating, author },
       where: { reviewsId: +reviewsId, password }
     });
 
@@ -115,9 +120,7 @@ router.put('/reviews/:reviewsId', async (req, res) => {
 //localhost:3017/api/reviews/:reviewId DELETE
 router.delete('/reviews/:reviewsId', async (req, res) => {
   try {
-    const validation = await createReviews.validateAsync(req.body);
-
-    const { password } = validation;
+    const { password } = req.body;
     const { reviewsId } = req.params;
 
     const reviews = await prisma.reviews.findFirst({
@@ -136,7 +139,7 @@ router.delete('/reviews/:reviewsId', async (req, res) => {
     // await prisma.reviews.delete({ where: { reviewsId : +reviewsId, password }})
     await prisma.reviews.update({
       data: { deletedAt: new Date() },
-      where: { reviewsId: +reviewsId, password }
+      where: { reviewsId: +reviewsId }
     });
 
     return res.status(200).json({ message: "책 리뷰를 삭제하였습니다." });
