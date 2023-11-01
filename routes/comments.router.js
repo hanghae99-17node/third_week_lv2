@@ -1,9 +1,8 @@
 import express from "express";
 import { prisma } from "../utils/prisma/index.js";
-import {createComments as createComments} from "../error.hander/joi.error.definition.js"
+import { createComments as createComments } from "../error.hander/joi.error.definition.js";
 
 const router = express.Router();
-
 
 /* 댓글 등록 */
 router.post("/reviews/:reviewsId/comments", async (req, res, next) => {
@@ -30,8 +29,8 @@ router.get("/reviews/:reviewsId/comments", async (req, res, next) => {
   const comments = await prisma.comments.findMany({
     where: { reviewsId: +reviewsId, deletedAt: null },
     select: {
-      commentsId: true,
       reviewsId: true,
+      commentsId: true,
       content: true,
       author: true,
       createdAt: true,
@@ -60,11 +59,9 @@ router.put(
           .status(404)
           .json({ errorMessage: "댓글이 존재하지 않습니다." });
       } else if (comment.password !== password || comment.author !== author) {
-        return res
-          .status(401)
-          .json({
-            errorMessage: "작성자명 또는 비밀번호가 일치하지 않습니다.",
-          });
+        return res.status(401).json({
+          errorMessage: "작성자명 또는 비밀번호가 일치하지 않습니다.",
+        });
       }
 
       await prisma.comments.update({
@@ -84,7 +81,9 @@ router.put(
 );
 
 /* 댓글 삭제 soft delete */
-router.delete("/reviews/:reviewsId/comments/:commentId", async (req, res, next) => {
+router.delete(
+  "/reviews/:reviewsId/comments/:commentId",
+  async (req, res, next) => {
     try {
       const { reviewsId, commentId } = req.params;
 
@@ -94,20 +93,22 @@ router.delete("/reviews/:reviewsId/comments/:commentId", async (req, res, next) 
         where: { commentsId: +commentId },
       });
 
+    //   if(Object.keys(comment).includes(deletedAt)) {
+    //     return res.status(404).status({Message : "이미 삭제처리된 댓글입니다"})
+    //   }           **원하는대로 작동하질 않는다.**
+
       if (!comment) {
         return res
           .status(404)
           .json({ errorMessage: "댓글이 존재하지 않습니다." });
       } else if (comment.password !== password || comment.author !== author) {
-        return res
-          .status(401)
-          .json({
-            errorMessage: "작성자명 또는 비밀번호가 일치하지 않습니다.",
-          });
+        return res.status(401).json({
+          errorMessage: "작성자명 또는 비밀번호가 일치하지 않습니다.",
+        });
       }
 
       await prisma.comments.update({
-        data: { deletedAt: new Date()},
+        data: { deletedAt: new Date() },
         where: {
           commentsId: +commentId,
           author,
@@ -122,13 +123,14 @@ router.delete("/reviews/:reviewsId/comments/:commentId", async (req, res, next) 
   }
 );
 
-
 /* 댓글 영구 삭제 */
-router.delete("/reviews/:reviewsId/comments/:commentId/permanentDelete", async (req, res, next) => {
+router.delete(
+  "/reviews/:reviewsId/comments/:commentId/permanentDelete",
+  async (req, res, next) => {
     try {
       const { reviewsId, commentId } = req.params;
 
-      const { content, author, password } = req.body;
+      const { author, password } = req.body;
 
       const comment = await prisma.comments.findUnique({
         where: { commentsId: +commentId },
@@ -139,11 +141,9 @@ router.delete("/reviews/:reviewsId/comments/:commentId/permanentDelete", async (
           .status(404)
           .json({ errorMessage: "댓글이 존재하지 않습니다." });
       } else if (comment.password !== password || comment.author !== author) {
-        return res
-          .status(401)
-          .json({
-            errorMessage: "작성자명 또는 비밀번호가 일치하지 않습니다.",
-          });
+        return res.status(401).json({
+          errorMessage: "작성자명 또는 비밀번호가 일치하지 않습니다.",
+        });
       }
 
       await prisma.comments.delete({
@@ -163,23 +163,21 @@ router.delete("/reviews/:reviewsId/comments/:commentId/permanentDelete", async (
 
 /* 삭제처리(soft delete) 된 댓글 조회 */
 router.get("/comments/deleted", async (req, res, next) => {
-
-
-    const comments = await prisma.comments.findMany({
-      where: { deletedAt : { not: null} },
-      select: {
-        commentsId: true,
-        reviewsId: true,
-        content: true,
-        author: true,
-        createdAt: true,
-        updatedAt: true,
-        deletedAt: true
-      },
-    });
-    
-        return res.status(200).json({ data: comments });
-
+  const comments = await prisma.comments.findMany({
+    where: { deletedAt: { not: null } },
+    select: {
+      reviewsId: true,
+      commentsId: true,
+      content: true,
+      author: true,
+      createdAt: true,
+      updatedAt: true,
+      deletedAt: true,
+    },
   });
 
+  return res.status(200).json({ data: comments });
+});
+
 export default router;
+
