@@ -77,7 +77,7 @@ router.put(
     } catch (error) {
       return res.status(400).json({ error: error.message });
     }
-  }
+  },
 );
 
 /* 댓글 삭제 soft delete */
@@ -93,9 +93,9 @@ router.delete(
         where: { commentsId: +commentId },
       });
 
-    //   if(Object.keys(comment).includes(deletedAt)) {
-    //     return res.status(404).status({Message : "이미 삭제처리된 댓글입니다"})
-    //   }           **원하는대로 작동하질 않는다.**
+      //   if(Object.keys(comment).includes(deletedAt)) {
+      //     return res.status(404).status({Message : "이미 삭제처리된 댓글입니다"})
+      //   }           **원하는대로 작동하질 않는다.**
 
       if (!comment) {
         return res
@@ -120,7 +120,7 @@ router.delete(
     } catch (error) {
       return res.status(400).json({ error: error.message });
     }
-  }
+  },
 );
 
 /* 댓글 영구 삭제 */
@@ -158,7 +158,7 @@ router.delete(
     } catch (error) {
       return res.status(400).json({ error: error.message });
     }
-  }
+  },
 );
 
 /* 삭제처리(soft delete) 된 댓글 조회 */
@@ -180,4 +180,3 @@ router.get("/comments/deleted", async (req, res, next) => {
 });
 
 export default router;
-
