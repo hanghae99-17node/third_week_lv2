@@ -2,6 +2,8 @@
 
 # INSOMNIA
 
+# 3030 포트사용
+
 /** REVIEW 등록 **/
 POST localhost:3030/api/reviews
 JSON
