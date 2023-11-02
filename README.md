@@ -1,5 +1,8 @@
 # third_week_lv2
 
+# ERD
+![drawSQL-third-week-lv2-export-2023-11-02](https://github.com/jeongyy123/algorithm/assets/147481035/6c2e5f2d-0416-4ff0-9fe4-fb0b62d4a89a)
+
 # INSOMNIA
 
 # 3030 포트사용
