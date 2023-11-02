@@ -2,7 +2,7 @@
 
 # INSOMNIA
 
-# REVIEW 등록
+/** REVIEW 등록 
 POST localhost:3030/api/reviews
 JSON
 {
@@ -14,14 +14,14 @@ JSON
 	"password" : 1234
 }
 
-# REVIEW 조회
-GET localhost:3030/api/reviews
+/** REVIEW 조회 **/
+GET // localhost:3030/api/reviews
 
-# REVIEW 상세 조회 
-GET localhost:3030/api/reviews/3
+/** REVIEW 상세 조회 **/
+GET // localhost:3030/api/reviews/3
 
-# REVIEW 수정
-PUT localhost:3030/api/reviews/3
+/** REVIEW 수정 **/
+PUT // localhost:3030/api/reviews/3
 JSON
 {
   "bookTitle": "더 좋은 삶을 위한 철학",
@@ -32,8 +32,8 @@ JSON
   "password": 1234
 }
 
-# REVIEW 삭제
-DELETE localhost:3030/api/reviews/3
+/** REVIEW 삭제 **/
+DELETE // localhost:3030/api/reviews/3
 JSON
 {
 	"password" : 1234
@@ -41,8 +41,8 @@ JSON
 
 
 -----------------------------------
-# COMMENT 등록
-POST localhost:3030/api/reviews/1/comments
+/** COMMENT 등록 **/
+POST // localhost:3030/api/reviews/1/comments
 JSON
 {
   "content": "이책도 엄청 좋던데",
@@ -50,11 +50,11 @@ JSON
   "password":1234
 }
 
-# COMMENT 조회
-GET localhost:3030/api//reviews/2/comments
+/** COMMENT 조회 **/
+GET // localhost:3030/api//reviews/2/comments
 
-# COMMENT 수정
-PUT localhost:3030/api/reviews/2/comments/2
+/** COMMENT 수정 **/
+PUT // localhost:3030/api/reviews/2/comments/2
 JSON
 {
   "content":"수정됨",
@@ -62,21 +62,21 @@ JSON
   "password":1234
 }
 
-# COMMENT 삭제 (soft)
-DELETE localhost:3030/api/reviews/2/comments/2
+/** COMMENT 삭제 (soft) **/
+DELETE // localhost:3030/api/reviews/2/comments/2
 JSON
 {
   "author":"뭘아는사람",
   "password":1234
 }
 
-# COMMENT 영구삭제 (hard)
-DELETE localhost:3030/api/reviews/2/comments/3/permanentDelete
+/** COMMENT 영구삭제 (hard) **/
+DELETE // localhost:3030/api/reviews/2/comments/3/permanentDelete
 JSON
 {
   "author":"뭘아는사람",
   "password":1234
 }
 
-# COMMENT 조회 (soft delete된 content 전체조회)
-GET localhost:3030/api//comments/deleted
+/** COMMENT 조회 (soft delete된 content 전체조회) **/
+GET // localhost:3030/api//comments/deleted
