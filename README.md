@@ -2,7 +2,7 @@
 
 # INSOMNIA
 
-/** REVIEW 등록 
+/** REVIEW 등록 **/
 POST localhost:3030/api/reviews
 JSON
 {
