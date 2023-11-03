@@ -12,11 +12,20 @@ router.post("/reviews/:reviewsId/comments", async (req, res, next) => {
     const validationBody = await createComments.validateAsync(req.body);
     const { content, author, password } = validationBody;
 
+    const review = await prisma.reviews.findFirst({
+      where : { reviewsId: +reviewsId}
+    })
+
+    if (review) {
+
     const comment = await prisma.comments.create({
       data: { reviewsId: +reviewsId, content, author, password },
     });
 
     return res.status(201).json({ data: comment });
+  } else {
+    return res.status(404).json({ message: "존재하지 않는 리뷰입니다"})
+  }
   } catch (error) {
     return res.status(400).json({ error: error.message });
   }
@@ -51,7 +60,7 @@ router.put(
       const { content, author, password } = validationBody;
 
       const comment = await prisma.comments.findUnique({
-        where: { commentsId: +commentId, deletedAt: null },
+        where: { commentsId: +commentId },
       });
 
       if (!comment) {
